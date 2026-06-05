@@ -1,0 +1,33 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+
+# Load SAP posts dataset
+posts = pd.read_csv(
+    "data/implicit-hate-corpus-nov-2021/implicit-hate-corpus/implicit_hate_v1_SAP_posts.tsv",
+    sep="\t"
+)
+
+# Load annotations dataset
+annotations = pd.read_csv(
+    "data/implicit-hate-corpus-nov-2021/implicit-hate-corpus/implicit_hate_v1_SAP_annotations.tsv",
+    sep="\t"
+)
+
+# Merge datasets on ID
+df = pd.merge(posts, annotations, on="ID")
+
+# Keep required columns
+df = df[["post", "class"]]
+
+# Rename columns to expected format
+df.columns = ["text", "label"]
+
+# Split dataset
+train, temp = train_test_split(df, test_size=0.2, random_state=42)
+dev, test = train_test_split(temp, test_size=0.5, random_state=42)
+
+# Save files
+train.to_csv("data/ihc/train.tsv", sep="\t", index=False)
+dev.to_csv("data/ihc/dev.tsv", sep="\t", index=False)
+test.to_csv("data/ihc/test.tsv", sep="\t", index=Fals
+print("Dataset conversion complete!")
